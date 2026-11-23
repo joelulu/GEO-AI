@@ -2,7 +2,7 @@
 
 **Nature 系列 AI × 遥感 / 地球科学 论文清单** —— 2024-11 ～ 2026-11，116 篇，可搜索 / 筛选 / 排序 / 导出的单页交互表格。
 
-> 在线浏览：[https://joelulu.github.io/GEO-AI/](https://joelulu.github.io/GEO-AI/)（需在仓库 Settings → Pages 开启 `main / root`）
+> 在线浏览：[https://joelulu.github.io/GEO-AI/](https://joelulu.github.io/GEO-AI/)（GitHub Pages 已启用，部署自 `main` 分支根目录）
 
 ## 这是什么
 
