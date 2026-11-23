@@ -84,9 +84,9 @@
     "加速 / 轻量化"
    ],
    "counts": {
-    "表征学习 / 基础模型": 22,
+    "表征学习 / 基础模型": 21,
     "分割 / 检测 / 制图": 55,
-    "时空 / 变化建模": 20,
+    "时空 / 变化建模": 21,
     "生成 / 模拟": 13,
     "超分 / 降尺度": 9,
     "同化 / 集合": 16,
@@ -3320,20 +3320,21 @@
    "domain_old": "土地利用",
    "task": "土地覆盖 / 建成环境",
    "ai_role": [
-    "表征学习 / 基础模型",
-    "分割 / 检测 / 制图"
+    "分割 / 检测 / 制图",
+    "时空 / 变化建模"
    ],
-   "ai_role_text": "表征学习 / 基础模型 / 分割 / 检测 / 制图",
+   "ai_role_text": "分割 / 检测 / 制图 / 时空 / 变化建模",
    "tags": [
-    "多模态 / VLM",
+    "Transformer / 注意力",
+    "变化检测 / 分割 / 检测",
     "遥感制图 / 产品"
    ],
    "zh": "SinoBF-1：1.1 亿栋建筑功能专题图揭示建成环境不均衡",
    "title": "Satellite mapping of every building's function in urban China reveals deep built environment disparities",
-   "ai": "有限标签条件下的楼栋尺度多模态深度学习功能分类",
-   "data": "1 m 光学 + 10 m 建筑高度 + 10 m 夜间灯光 + 自发地理信息，共 69 TB；109 座主要城市",
+   "ai": "Paraformer（弱监督 ViT 语义分割，CVPR 2024 Highlight 前作）+ Mask R-CNN 对未分类建筑做对象级重分类，两段式；解决楼栋功能标注稀缺下的分类",
+   "data": "1 m Google 光学 + 10 m SDGSAT-1 夜间灯光 + CNBH-10m 建筑高度 + OSM/EULUC-China 功能标注 + 七普 100 m 人口，共 69 TB；109 城 1.1 亿栋；528 万个实测点验证",
    "finding": "一二线城市公共服务可达性与配套多样性明显占优，二三线住房分配更均衡；南方城市可达性最好但设施拥挤，新城区不均衡强于老城区",
-   "tip": "SinoBF-1 数据在国家地球系统科学数据中心/Zenodo 开源",
+   "tip": "代码+数据全开源：github.com/LiZhuoHong/SinoBF-1（含下载与复现全流程）、Zenodo 10.5281/zenodo.17844789；仓库未声明 License，商用需联系作者",
    "team": "武汉大学 / 杜克大学 / 南信大 / 中国地大（武汉）（Zhuohong Li、张良培、张洪艳等）",
    "source": "初版检索",
    "source_label": "初版检索",
