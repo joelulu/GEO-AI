@@ -18,7 +18,7 @@
 | 两源以上同时收录 | 19 |
 | 优先精读 ★ | 37 |
 
-## 五个正交筛选维度
+## 六个正交筛选维度
 
 表格把原先混在一起的字段拆成互不干扰的独立维度，任一组合都能正确叠加：
 
@@ -27,8 +27,11 @@
 | **期刊层级** | 正刊 / 子刊 / 数据期刊 / 方法期刊 | 只表示期刊在 Nature Portfolio 中的位置 |
 | **文章类型** | 研究论文 / 数据描述符 / 观点·综述 / 社论 | 与层级正交，独立一列 |
 | **任务族** | 气象与气候、水文与洪涝、地质灾害、农业、生态与碳、土地利用、冰冻圈、海洋与水质、基础模型与方法等 11 类 | 由宽泛学科领域收敛而来 |
-| **AI 角色** | 表征学习 / 生成模拟 / 超分降尺度 / 加速轻量化 / 分割制图 / 归因可解释等 | AI 具体在做什么，与技术栈标签区分 |
+| **AI 角色** | 表征学习 / 生成模拟 / 超分降尺度 / 加速轻量化 / 分割制图 / 归因可解释等 9 类 | AI 具体在做什么；**多标签**，一篇可同时占多个角色，故各类计数之和大于 116 |
 | **证据状态** | 摘要核对 / 来源清单策展 | 中文要点的依据强度 |
+| **来源** | 初版检索 / 自建清单 / 方法向新增 / 多源交叉 | 该 DOI 出现在哪几份检索清单里 |
+
+页面上另有「年份」下拉，与上述六个维度叠加使用，共 7 个筛选器。
 
 早期版本把期刊缩写（`Sci Rep`）与文章类型（`观点·综述`）都塞进「层级」一个字段，按层级筛选时会混进不相关内容，现已拆开。
 
@@ -36,7 +39,7 @@
 
 | 文件 | 说明 |
 |---|---|
-| [`data/master.json`](data/master.json) | **主数据**。26 个字段 + 五个维度的字典与计数 + 每篇的来源成员关系，适合二次开发 |
+| [`data/master.json`](data/master.json) | **主数据**。每条 29 个字段 + 六个维度的字典与计数 + 来源成对交叉统计，适合二次开发 |
 | [`data/papers.csv`](data/papers.csv) | 25 列全字段表，UTF-8 BOM，Excel 直接打开 |
 | [`data/papers.json`](data/papers.json) | 页面同款精简数据，含统计与五条阅读路线 |
 | [`data/papers.md`](data/papers.md) | Markdown 表格，便于贴进笔记 |
@@ -47,12 +50,21 @@
 {
   "schema_version": "1.0",
   "count": 116,
-  "dimensions": { "tier": {"values": [], "counts": {}}, "ai_role": {}, "evidence": {} },
+  "dimensions": {
+    "tier":          {"label": "期刊层级", "values": [], "counts": {}},
+    "article_type":  {"label": "文章类型", "values": [], "counts": {}},
+    "task_family":   {"label": "任务族",   "values": [], "counts": {}},
+    "ai_role":       {"label": "AI 角色",  "values": [], "counts": {}},
+    "evidence":      {"label": "证据状态", "values": [], "counts": {}},
+    "source":        {"label": "来源",     "values": [], "counts": {}, "pairwise": {}}
+  },
   "stats": { "total": 116, "y2026": 90, "multi_source": 19 },
   "tracks": [],
-  "papers": [ { "doi": "", "tier": "", "article_type": "", "task": "", "ai_role": [], "members": [], "evidence": "" } ]
+  "papers": [ { "doi": "", "tier": "", "article_type": "", "domain": "", "ai_role": ["", ""], "members": [], "evidence": "" } ]
 }
 ```
+
+其中 `ai_role` 是**数组**（多标签），`dimensions.ai_role.counts` 是按标签展开后的计数，`sum(counts) = 189 > 116`，属预期行为。
 
 ## 来源与去重
 
