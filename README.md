@@ -2,7 +2,7 @@
 
 **Nature 系列 AI × 遥感 / 地球科学 论文清单** —— 2024-11 ～ 2026-11，116 篇，可搜索 / 筛选 / 排序 / 导出的单页交互表格。
 
-> 在线浏览：[https://joelulu.github.io/GEO-AI/](https://joelulu.github.io/GEO-AI/)（GitHub Pages 已启用，部署自 `main` 分支根目录）
+> 在线浏览：[https://joelulu.github.io/GEO-AI/](https://joelulu.github.io/GEO-AI/)（GitHub Pages，部署自 `main` 分支根目录）
 
 ## 这是什么
 
@@ -12,55 +12,95 @@
 |---|---|
 | 合并总篇数 | **116** |
 | 2026 / 2025 / 2024 | **90** / 25 / 1 |
-| Nature 正刊 / 子刊 | 12 / 69 |
-| 数据期刊 / Scientific Reports / 观点综述 | 22 / 6 / 7 |
+| Nature 正刊 / 子刊 | 12 / 76 |
+| 数据期刊 / 方法期刊 | 22 / 6 |
+| 研究论文 / 数据描述符 / 观点·社论 | 87 / 22 / 7 |
+| 两源以上同时收录 | 19 |
 | 优先精读 ★ | 37 |
 
-数据来源为三份清单按 DOI 去重：初版检索 39 篇、自建清单 64 篇、2026 方法向补检索 27 篇；三份交叉核验 14 篇，合并后互补性强（重合率 21.9%）。
+## 五个正交筛选维度
+
+表格把原先混在一起的字段拆成互不干扰的独立维度，任一组合都能正确叠加：
+
+| 维度 | 取值 | 说明 |
+|---|---|---|
+| **期刊层级** | 正刊 / 子刊 / 数据期刊 / 方法期刊 | 只表示期刊在 Nature Portfolio 中的位置 |
+| **文章类型** | 研究论文 / 数据描述符 / 观点·综述 / 社论 | 与层级正交，独立一列 |
+| **任务族** | 气象与气候、水文与洪涝、地质灾害、农业、生态与碳、土地利用、冰冻圈、海洋与水质、基础模型与方法等 11 类 | 由宽泛学科领域收敛而来 |
+| **AI 角色** | 表征学习 / 生成模拟 / 超分降尺度 / 加速轻量化 / 分割制图 / 归因可解释等 | AI 具体在做什么，与技术栈标签区分 |
+| **证据状态** | 摘要核对 / 来源清单策展 | 中文要点的依据强度 |
+
+早期版本把期刊缩写（`Sci Rep`）与文章类型（`观点·综述`）都塞进「层级」一个字段，按层级筛选时会混进不相关内容，现已拆开。
+
+## 数据文件
+
+| 文件 | 说明 |
+|---|---|
+| [`data/master.json`](data/master.json) | **主数据**。26 个字段 + 五个维度的字典与计数 + 每篇的来源成员关系，适合二次开发 |
+| [`data/papers.csv`](data/papers.csv) | 25 列全字段表，UTF-8 BOM，Excel 直接打开 |
+| [`data/papers.json`](data/papers.json) | 页面同款精简数据，含统计与五条阅读路线 |
+| [`data/papers.md`](data/papers.md) | Markdown 表格，便于贴进笔记 |
+
+`master.json` 的结构：
+
+```json
+{
+  "schema_version": "1.0",
+  "count": 116,
+  "dimensions": { "tier": {"values": [], "counts": {}}, "ai_role": {}, "evidence": {} },
+  "stats": { "total": 116, "y2026": 90, "multi_source": 19 },
+  "tracks": [],
+  "papers": [ { "doi": "", "tier": "", "article_type": "", "task": "", "ai_role": [], "members": [], "evidence": "" } ]
+}
+```
+
+## 来源与去重
+
+三份检索结果按 DOI 去重合并：
+
+- **多源交叉 19 篇** —— 同时出现在两份以上清单，交叉核验通过。其中「初版检索 × 自建清单」14 篇、「自建清单 × 方法向新增」5 篇。
+- **自建清单 45 篇** / **初版检索 25 篇** / **方法向新增 27 篇** —— 各自独有的部分，合计 97 篇。
+
+> 早期版本把「同时出现在自建清单与方法向新增」的 5 篇只算进单一来源，于是得出「重合 14 篇」的说法，漏计了这部分。现在按每篇 DOI 实际出现在几份清单中计数，页面统计、CSV、JSON 与 Markdown 四处同源，`116 = 97 单源 + 19 多源`。
 
 ## 五条阅读路线
 
-页面里可一键筛选，这里只列要点：
+按 AIGC、扩散模型与模型压缩可复用的方法设计重排，页面上可一键筛选：
 
-1. **生成式模型 / Diffusion** — GenCast 扩散集合、生成式降尺度、GAP 生成式同化、条件生成地震动、扩散降尺度横评与 RainShift OOD 基准。
-2. **基础模型 / 自监督 / 多模态** — SkySense++、AlphaEarth 嵌入、WorldTensor、AgroFusion、FTPD-ML、CHMv2。
-3. **加速 / 轻量化 / 超分** — LMW-YOLO、LDA-YOLO、降阶 EOF 空间加速、ViSIR/ViFOR 频域超分、FuXi-CFD。
-4. **时空建模 / 神经算子 / 物理约束** — Quake Neural Operator、Transformer 神经算子、物理引导风场、Cross-Unet、资料同化与 ML 融合。
-5. **评测 / 可信 / 泛化** — 甲烷单盲测试、SHAP 归因、跨地理泛化、架构消融与偏差审计。
+1. 生成式模型 / Diffusion 在地学里到底怎么用（8 篇）
+2. 基础模型 / 自监督 / 多模态表征（10 篇）
+3. 加速 / 轻量化 / 超分（7 篇）
+4. 时空建模 / 神经算子 / 物理约束（8 篇）
+5. 评测 / 可信 / 泛化（8 篇）
 
-## 文件结构
+## 口径与核验
 
-```
-index.html            # 站点入口，纯前端零依赖，离线打开也完整可用
-data/papers.csv       # 19 列全字段（UTF-8 BOM，Excel 直接打开）
-data/papers.md        # Markdown 表格
-data/papers.json      # 结构化数据 + 分类字典 + 五条路线的 DOI 列表
-favicon.svg
-.nojekyll             # 避免 GitHub Pages 的 Jekyll 处理
-```
+- **期刊范围**：Nature 正刊及 Nature Portfolio 全系，含 Nature Machine Intelligence、Nature Geoscience、Nature Communications、Nature Food、Nature Water、Nature Climate Change、Nature Sensors、Communications 与 npj 系列、Scientific Data、Scientific Reports。
+- **截取窗口**：`published online` 在 2024-11-01 ～ 2026-11-20 之间；正式卷期年份可能不同。
+- **核验方式**：全部 116 条经 Crossref 核对 DOI → 标题 / 期刊 / 上线日期；中文要点依据 Nature 官网与 OpenAlex 摘要人工策展。
+- **局限**：非 Nature Portfolio 全量枚举，Nature Communications 体量极大仍可能遗漏；任务族与 AI 角色由题名、摘要与标签规则归类，交叉主题需看「具体任务」列细化。
 
 ## 本地预览
 
+纯前端零依赖，双击 `index.html` 即可，也可起本地服务：
+
 ```bash
-git clone https://github.com/joelulu/GEO-AI.git
-cd GEO-AI
 python -m http.server 8000
 # 打开 http://localhost:8000
 ```
 
-`index.html` 不依赖任何 CDN，直接双击打开也能用（下载链接需经 HTTP 服务才能生效）。
+交互全部在前端完成：搜索覆盖标题 / 方法 / 数据 / 结论 / 标签 / DOI 及新增维度；七个下拉框可任意叠加；点表头排序；「导出当前结果 CSV」只导出筛选后的行。
 
-## 口径与核验
+## 重新生成
 
-- **期刊范围**：Nature 正刊及 Nature Portfolio 全系（Nature Machine Intelligence、Nature Geoscience、Nature Communications、Nature Food / Water / Climate Change / Sensors、Communications Earth & Environment / Physics / Sustainability、npj 系列、Scientific Data、Scientific Reports 等）。数据期刊与 Scientific Reports 单独标注层级。
-- **纳入标准**：AI/ML 是核心方法，作用于遥感影像或地学数据，产出实质性制图、预报、反演、归因或可复用基准。观点 / 综述 / 社论与数据描述符保留但显式标注；纯方法学无地学落地者剔除。
-- **核验方式**：逐条用 Crossref 核对 DOI → 标题、期刊、上线日期；OpenAlex 摘要与 Nature 官网补方法 / 数据 / 结论；中文要点为人工策展。
-- **日期**：使用 published online，与正式卷期年份可能不同。部分 2026 年上线的 Scientific Reports 论文 DOI 含 2025 字样，属正常编号。
+```bash
+cd research
+python build_v3.py        # 从主数据生成 index.html + data/*.{csv,json,md}
+node test_reset.js        # 27 项回归测试（筛选状态与数据完整性）
+```
 
-## 局限
+`research/data_v3.py` 是唯一数据源：它把 `data_merged.py` 的原始记录做维度拆分并统计，`build_v3.py` 只负责渲染。要加论文就改 `data_v3.py` 上游的 `data_papers.py` / `user64.tsv` / `verified_extra.json`，再跑一次构建。
 
-非 Nature Portfolio 全量枚举，Nature Communications 体量极大仍可能遗漏。3 篇论文摘要未获取（据题名与 Crossref 元数据归纳，页面阅读提示中已标注需核对原文）。1 篇行星遥感属范围边缘扩展。
+## 署名
 
----
-
-Curated by [joelulu](https://github.com/joelulu) · 数据来源 Crossref / OpenAlex / Nature Portfolio / 公开中文解读 · 检索执行日 2026-11-20
+Curated by [joelulu](https://github.com/joelulu) · 数据来源 Crossref / OpenAlex / Nature Portfolio · 检索执行日 2026-11-20
